@@ -18,7 +18,7 @@ spec:
       containers:
       - name: portal-d
         # Jenkins will dynamically replace IMAGE_TAG_PLACEHOLDER with the real tag
-        image: 192.168.10.23:5000/portal-d:IMAGE_TAG_PLACEHOLDER
+        image: 192.168.10.23:5000/portal-d:build-3
         ports:
         - containerPort: 5000 # The port our Flask app is listening on
         env:
