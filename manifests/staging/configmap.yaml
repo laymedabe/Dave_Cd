@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: portal-d-config
+  name: portal-d-staging-config
   namespace: exam-4 # Trainee Dave's assigned namespace
 data:
   # This block creates a file called 'config.json' inside the ConfigMap

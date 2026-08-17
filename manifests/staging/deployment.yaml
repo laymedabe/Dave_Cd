@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: portal-d
+  name: portal-d-staging
   namespace: exam-4
 spec:
   replicas: 1 # Number of pods to run
   selector:
     matchLabels:
-      app: portal-d # Links the deployment to the pods it creates
+      app: portal-d-staging # Links the deployment to the pods it creates
   template:
     metadata:
       labels:
-        app: portal-d
+        app: portal-d-staging
     spec:
       imagePullSecrets:
       - name: regcred # Secret used to authenticate with 192.168.10.23:5000
       containers:
-      - name: portal-d
+      - name: portal-d-staging
         # Jenkins will dynamically replace IMAGE_TAG_PLACEHOLDER with the real tag
         image: 192.168.10.23:5000/portal-d:build-7
         ports:
