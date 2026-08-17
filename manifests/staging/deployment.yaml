@@ -33,7 +33,7 @@ spec:
         - name: API_KEY
           valueFrom:
             secretKeyRef:
-              name: portal-d-secret # Matches the name in secret.yaml
+              name: portal-d-staging-secret # Matches the name in secret.yaml
               key: API_KEY
         volumeMounts:
         # Mount the ConfigMap as a directory inside the container
@@ -66,4 +66,4 @@ spec:
       # Defines the volume mapping it to our ConfigMap
       - name: config-volume
         configMap:
-          name: portal-d-config # Matches the name in configmap.yaml
+          name: portal-d-staging-config # Matches the name in configmap.yaml
