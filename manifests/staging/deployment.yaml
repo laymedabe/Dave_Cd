@@ -4,50 +4,58 @@ metadata:
   name: portal-d
   namespace: exam-4
 spec:
-  replicas: 1
+  replicas: 1 # Number of pods to run
   selector:
     matchLabels:
-      app: portal-d
+      app: portal-d # Links the deployment to the pods it creates
   template:
     metadata:
       labels:
         app: portal-d
     spec:
       imagePullSecrets:
-      - name: regcred
+      - name: regcred # Secret used to authenticate with 192.168.10.23:5000
       containers:
       - name: portal-d
+        # Jenkins will dynamically replace IMAGE_TAG_PLACEHOLDER with the real tag
         image: 192.168.10.23:5000/portal-d:IMAGE_TAG_PLACEHOLDER
         ports:
-        - containerPort: 5000
+        - containerPort: 5000 # The port our Flask app is listening on
         env:
+        # Standard Environment Variables
         - name: APP_ENV
           value: "staging"
         - name: APP_VERSION
           value: "IMAGE_TAG_PLACEHOLDER"
         - name: CONFIG_PATH
           value: "/app/config/config.json"
+        # Secret injected Environment Variable
         - name: API_KEY
           valueFrom:
             secretKeyRef:
-              name: portal-d-secret
+              name: portal-d-secret # Matches the name in secret.yaml
               key: API_KEY
         volumeMounts:
+        # Mount the ConfigMap as a directory inside the container
         - name: config-volume
           mountPath: /app/config
         resources:
+          # Minimum resources guaranteed to the pod
           requests:
             memory: "64Mi"
             cpu: "50m"
+          # Maximum resources the pod is allowed to use
           limits:
             memory: "128Mi"
             cpu: "100m"
+        # Liveness probe: restarts the pod if it freezes
         livenessProbe:
           httpGet:
             path: /healthz
             port: 5000
           initialDelaySeconds: 3
           periodSeconds: 10
+        # Readiness probe: prevents traffic routing if config/secrets fail to load
         readinessProbe:
           httpGet:
             path: /readyz
@@ -55,6 +63,7 @@ spec:
           initialDelaySeconds: 3
           periodSeconds: 10
       volumes:
+      # Defines the volume mapping it to our ConfigMap
       - name: config-volume
         configMap:
-          name: portal-d-config
+          name: portal-d-config # Matches the name in configmap.yaml
