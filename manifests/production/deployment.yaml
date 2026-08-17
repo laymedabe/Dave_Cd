@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portal-d
+  namespace: exam-4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: portal-d
+  template:
+    metadata:
+      labels:
+        app: portal-d
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: portal-d
+        image: 192.168.10.23:5000/portal-d:IMAGE_TAG_PLACEHOLDER
+        ports:
+        - containerPort: 5000
+        env:
+        - name: APP_ENV
+          value: "production"
+        - name: APP_VERSION
+          value: "IMAGE_TAG_PLACEHOLDER"
+        - name: CONFIG_PATH
+          value: "/app/config/config.json"
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: portal-d-secret
+              key: API_KEY
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 5000
+          initialDelaySeconds: 3
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 5000
+          initialDelaySeconds: 3
+          periodSeconds: 10
+      volumes:
+      - name: config-volume
+        configMap:
+          name: portal-d-config

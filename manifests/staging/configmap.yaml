@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: portal-d-config
+  namespace: exam-4
+data:
+  config.json: |
+    {
+      "app_name": "portal-d",
+      "subtitle": "Staging Environment",
+      "owner": "Dave"
+    }
