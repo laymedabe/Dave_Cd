@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: portal-d
+  name: portal-d-prod
   namespace: exam-4
 spec:
   replicas: 1 # Number of pods to run
   selector:
     matchLabels:
-      app: portal-d # Links the deployment to the pods it creates
+      app: portal-d-prod # Links the deployment to the production pods it creates
   template:
     metadata:
       labels:
-        app: portal-d
+        app: portal-d-prod
     spec:
       imagePullSecrets:
       - name: regcred # Authentication for pulling from the private registry
       containers:
-      - name: portal-d
+      - name: portal-d-prod
         # Jenkins will dynamically replace IMAGE_TAG_PLACEHOLDER with the real tag
         image: 192.168.10.23:5000/portal-d:IMAGE_TAG_PLACEHOLDER
         ports:
@@ -32,7 +32,7 @@ spec:
         - name: API_KEY
           valueFrom:
             secretKeyRef:
-              name: portal-d-secret # Matches the name in secret.yaml
+              name: portal-d-prod-secret # Matches the name in secret.yaml
               key: API_KEY
         # Maps the Production ConfigMap into the container
         volumeMounts:
@@ -63,4 +63,4 @@ spec:
       volumes:
       - name: config-volume
         configMap:
-          name: portal-d-config # Matches the name in configmap.yaml
+          name: portal-d-prod-config # Matches the name in configmap.yaml
