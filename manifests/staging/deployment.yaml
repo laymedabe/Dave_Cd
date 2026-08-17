@@ -18,7 +18,7 @@ spec:
       containers:
       - name: portal-d-staging
         # Jenkins will dynamically replace IMAGE_TAG_PLACEHOLDER with the real tag
-        image: 192.168.10.23:5000/portal-d:build-7
+        image: 192.168.10.23:5000/portal-d:build-8
         ports:
         - containerPort: 5000 # The port our Flask app is listening on
         env:
@@ -26,7 +26,7 @@ spec:
         - name: APP_ENV
           value: "staging"
         - name: APP_VERSION
-          value: build-7 # APP_VERSION
+          value: build-8 # APP_VERSION
         - name: CONFIG_PATH
           value: "/app/config/config.json"
         # Secret injected Environment Variable
